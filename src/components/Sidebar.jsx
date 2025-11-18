@@ -6,6 +6,10 @@ export default function Sidebar({ open, setOpen }) {
   const [expanded, setExpanded] = useState(false)
   const [isDark, setIsDark] = useState(false)
 
+  // Colors
+  const primary = '#008000' // green primary
+  const accent = '#f87500'  // orange accent
+
   // Theme control
   useEffect(() => {
     // Default to light theme
@@ -50,8 +54,13 @@ export default function Sidebar({ open, setOpen }) {
     { href: '#contact', label: 'Contact Us', icon: Phone },
   ]
 
-  const primaryColor = '#1e73be' // from logo
   const logoUrl = import.meta.env.VITE_LOGO_URL || 'https://activecontrolautomation.com/wp-content/uploads/2020/09/cropped-ActiveControl-logo-1.png'
+
+  // Beautiful hover animation variants
+  const itemVariants = {
+    initial: { x: 0 },
+    hover: { x: 6, transition: { type: 'spring', stiffness: 400, damping: 24 } },
+  }
 
   return (
     <>
@@ -78,14 +87,14 @@ export default function Sidebar({ open, setOpen }) {
           onMouseEnter={() => setExpanded(true)}
           onMouseLeave={() => setExpanded(false)}
           animate={{ width: expanded ? 280 : 88 }}
-          transition={{ type: 'spring', stiffness: 200, damping: 24 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 30 }}
           className="h-full bg-white/90 dark:bg-[#0b1220]/90 backdrop-blur-xl border-r border-black/10 dark:border-white/10 text-slate-800 dark:text-slate-200 flex flex-col"
         >
           <div className="px-4 py-5 border-b border-black/10 dark:border-white/10 flex items-center gap-3">
             <img src={logoUrl} alt="Active Control Automation" className="h-10 w-auto" />
             {expanded && (
               <div className="overflow-hidden">
-                <div className="text-[10px] tracking-widest" style={{ color: primaryColor }}>INDUSTRIAL SALES CORPORATION</div>
+                <div className="text-[10px] tracking-widest" style={{ color: primary }}>INDUSTRIAL SALES CORPORATION</div>
                 <h2 className="text-sm font-semibold leading-tight">ACTIVE CONTROL AUTOMATION</h2>
               </div>
             )}
@@ -93,18 +102,23 @@ export default function Sidebar({ open, setOpen }) {
 
           <nav className="flex-1 overflow-y-auto py-4">
             {links.map(({ href, label, icon: Icon }) => (
-              <a
+              <motion.a
                 key={href}
                 href={href}
-                className="group flex items-center gap-3 px-4 py-3 text-sm hover:bg-black/5 dark:hover:bg-white/5 transition"
+                variants={itemVariants}
+                initial="initial"
+                whileHover="hover"
+                className="group relative flex items-center gap-3 px-4 py-3 text-sm"
               >
+                <span className="absolute inset-y-0 left-0 w-1 rounded-r-full opacity-0 group-hover:opacity-100 transition" style={{ background: accent }} />
                 <span className="inline-flex w-9 justify-center text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-100 transition"><Icon size={22} /></span>
                 {expanded && <span className="flex-1">{label}</span>}
-              </a>
+                <span className="ml-auto hidden lg:block rounded-full px-2 py-0.5 text-[10px] border border-black/10 dark:border-white/10 opacity-0 group-hover:opacity-100 transition" style={{ color: primary }}>{expanded ? '' : ''}</span>
+              </motion.a>
             ))}
           </nav>
 
-          {/* Theme toggle + Social icons */}
+          {/* Theme toggle + Email + Social icons */}
           <div className="px-4 py-4 border-t border-black/10 dark:border-white/10">
             <div className="flex items-center justify-between">
               <button
@@ -118,16 +132,26 @@ export default function Sidebar({ open, setOpen }) {
               </button>
             </div>
 
-            {/* Two-row social grid */}
-            <div className="mt-3 grid grid-cols-2 gap-3 text-slate-600 dark:text-slate-400">
+            {/* Email link */}
+            <div className="mt-3">
+              <a href="mailto:sales@activecontrol.com.ph" className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/70 dark:bg-white/5 border border-black/10 dark:border-white/10 hover:shadow-md transition">
+                <Mail size={18} className="text-slate-600 dark:text-slate-300" />
+                {expanded && <span className="text-sm">sales@activecontrol.com.ph</span>}
+              </a>
+            </div>
+
+            {/* Social grid below the email */}
+            <div className="mt-3 grid grid-cols-3 gap-3 text-slate-600 dark:text-slate-400">
               <a href="#" aria-label="Facebook" className="flex items-center justify-center rounded-lg px-3 py-2 hover:bg-black/5 dark:hover:bg-white/10 transition"><Facebook size={20} /></a>
-              <a href="#" aria-label="LinkedIn" className="flex items-center justify-center rounded-lg px-3 py-2 hover:bg_black/5 dark:hover:bg-white/10 transition"><Linkedin size={20} /></a>
-              <a href="#" aria-label="Instagram" className="flex items-center justify-center rounded-lg px-3 py-2 hover:bg-black/5 dark:hover:bg_white/10 transition"><Instagram size={20} /></a>
-              <a href="#contact" aria-label="Email" className="flex items-center justify-center rounded-lg px-3 py-2 hover:bg-black/5 dark:hover:bg-white/10 transition"><Mail size={20} /></a>
+              <a href="#" aria-label="LinkedIn" className="flex items-center justify-center rounded-lg px-3 py-2 hover:bg-black/5 dark:hover:bg-white/10 transition"><Linkedin size={20} /></a>
+              <a href="#" aria-label="Instagram" className="flex items-center justify-center rounded-lg px-3 py-2 hover:bg-black/5 dark:hover:bg-white/10 transition"><Instagram size={20} /></a>
             </div>
 
             {expanded && (
-              <div className="text-[11px] text-slate-500 dark:text-slate-500 mt-3">Copyright © 2026 All Rights Reserved. Powered by Endsofttech Web Solutions</div>
+              <div className="text-[11px] text-slate-500 dark:text-slate-500 mt-3 space-y-1">
+                <div>Copyright © 2026 All Rights Reserved. </div>
+                <div>Powered by Endsofttech Web Solutions</div>
+              </div>
             )}
           </div>
         </motion.aside>
@@ -184,16 +208,23 @@ export default function Sidebar({ open, setOpen }) {
               <div className="px-5 py-4 border-t border-black/10 dark:border-white/10">
                 <button
                   onClick={toggleTheme}
-                  className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-black/5 dark:bg-white/10 text-slate-800 dark:text-slate-200 hover:bg-black/10 dark:hover:bg-white/15 transition"
+                  className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-black/5 dark:bg:white/10 text-slate-800 dark:text-slate-200 hover:bg-black/10 dark:hover:bg-white/15 transition"
                 >
                   {isDark ? <Sun size={18} /> : <Moon size={18} />}
                   <span className="text-sm">{isDark ? 'Light theme' : 'Dark theme'}</span>
                 </button>
-                <div className="mt-3 grid grid-cols-4 gap-3 text-slate-600 dark:text-slate-400">
+                <a href="mailto:sales@activecontrol.com.ph" className="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-white/70 dark:bg-white/5 border border-black/10 dark:border-white/10">
+                  <Mail size={18} className="text-slate-600 dark:text-slate-300" />
+                  <span className="text-sm">sales@activecontrol.com.ph</span>
+                </a>
+                <div className="mt-3 grid grid-cols-3 gap-3 text-slate-600 dark:text-slate-400">
                   <a href="#" aria-label="Facebook" className="flex items-center justify-center rounded-lg px-3 py-2 hover:bg-black/5 dark:hover:bg-white/10 transition"><Facebook size={20} /></a>
-                  <a href="#" aria-label="LinkedIn" className="flex items-center justify-center rounded-lg px-3 py-2 hover:bg-black/5 dark:hover:bg_white/10 transition"><Linkedin size={20} /></a>
+                  <a href="#" aria-label="LinkedIn" className="flex items-center justify-center rounded-lg px-3 py-2 hover:bg-black/5 dark:hover:bg-white/10 transition"><Linkedin size={20} /></a>
                   <a href="#" aria-label="Instagram" className="flex items-center justify-center rounded-lg px-3 py-2 hover:bg-black/5 dark:hover:bg-white/10 transition"><Instagram size={20} /></a>
-                  <a href="#contact" aria-label="Email" className="flex items-center justify-center rounded-lg px-3 py-2 hover:bg-black/5 dark:hover:bg-white/10 transition"><Mail size={20} /></a>
+                </div>
+                <div className="text-[11px] text-slate-500 dark:text-slate-500 mt-3 space-y-1">
+                  <div>Copyright © 2026 All Rights Reserved. </div>
+                  <div>Powered by Endsofttech Web Solutions</div>
                 </div>
               </div>
             </motion.aside>

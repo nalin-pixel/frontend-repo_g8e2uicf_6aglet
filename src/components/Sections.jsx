@@ -46,7 +46,8 @@ export default function Sections() {
     { icon: Award, label: 'Authorized Distributor' },
   ]
 
-  const primary = '#1e73be'
+  const primary = '#008000'
+  const accent = '#f87500'
 
   return (
     <div className="relative bg-white text-slate-800 dark:bg-[#0b1220] dark:text-slate-100">
@@ -74,7 +75,7 @@ export default function Sections() {
           </motion.div>
           <motion.div variants={fadeUp} className="md:col-span-2 bg-white/70 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl p-6">
             <div className="flex items-start gap-3">
-              <Sparkles className="text-[#1e73be]" />
+              <Sparkles style={{ color: primary }} />
               <div>
                 <h3 className="font-semibold">Why choose us</h3>
                 <ul className="mt-3 space-y-2 text-slate-600 dark:text-slate-300 text-sm list-disc ml-4">
@@ -103,9 +104,10 @@ export default function Sections() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
-              className="group bg-white/70 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl p-6 hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#1e73be]/10 transition-transform"
+              className="group bg-white/70 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl p-6 hover:-translate-y-1 hover:shadow-2xl transition-transform"
+              style={{ boxShadow: '0 10px 30px -10px ' + primary + '22' }}
             >
-              <s.icon className="text-[#1e73be]" />
+              <s.icon style={{ color: primary }} />
               <h3 className="mt-4 font-semibold text-lg">{s.title}</h3>
               <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{s.desc}</p>
             </motion.div>
@@ -155,7 +157,7 @@ export default function Sections() {
             <div className="flex flex-wrap gap-4 text-slate-600 dark:text-slate-300">
               {certifications.map((c) => (
                 <div key={c.label} className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/60 dark:bg-white/10 border border-black/10 dark:border-white/10">
-                  <c.icon className="text-[#1e73be]" size={18} />
+                  <c.icon style={{ color: primary }} size={18} />
                   <span className="text-sm">{c.label}</span>
                 </div>
               ))}
@@ -180,9 +182,12 @@ export default function Sections() {
         <div className="grid md:grid-cols-2 gap-10">
           <div>
             <h2 className="text-2xl sm:text-3xl font-bold">Get in touch</h2>
-            <div className="mt-4 space-y-2 text-sm text-slate-700 dark:text-slate-300">
-              <div>Contact numbers: +632 8871-0273 / 8871-0274 / 8245-1637 / +632 8781-3964 / 8546-6106 / 8554-9763 / +632 8353-8378</div>
-              <div>email : sales@activecontrol.com.ph</div>
+            <div className="mt-4 space-y-3 text-sm text-slate-700 dark:text-slate-300">
+              <ContactNumbers />
+              <div className="flex items-center gap-2">
+                <Mail size={16} className="opacity-70" />
+                <a href="mailto:sales@activecontrol.com.ph" className="hover:underline">sales@activecontrol.com.ph</a>
+              </div>
             </div>
           </div>
           <ContactForm />
@@ -192,19 +197,37 @@ export default function Sections() {
       {/* Footer */}
       <footer className="border-t border-black/10 dark:border-white/10 py-10 text-sm">
         <div className="max-w-7xl mx-auto px-6 lg:pl-[88px] lg:pr-12">
-          <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
-            <div className="text-slate-600 dark:text-slate-300 text-center md:text-left">
-              Copyright © 2026 All Rights Reserved. Powered by Endsofttech Web Solutions
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center md:text-right text-slate-700 dark:text-slate-300">
-              <a href="#team" className="hover:underline">Our team</a>
-              <a href="#industries" className="hover:underline">Industries</a>
-              <a href="#partners" className="hover:underline">Principal / Partners</a>
-              <a href="#projects" className="hover:underline">Projects</a>
-            </div>
+          <div className="flex flex-col items-center gap-1 text-slate-600 dark:text-slate-300 text-center">
+            <div>Copyright © 2026 All Rights Reserved. </div>
+            <div>Powered by Endsofttech Web Solutions</div>
           </div>
         </div>
       </footer>
+    </div>
+  )
+}
+
+function ContactNumbers() {
+  const nums = [
+    '+632 8871-0273',
+    '8871-0274',
+    '8245-1637',
+    '+632 8781-3964',
+    '8546-6106',
+    '8554-9763',
+    '+632 8353-8378',
+  ]
+  return (
+    <div className="space-y-2">
+      <div className="font-medium">Contact numbers</div>
+      <div className="grid sm:grid-cols-2 gap-2">
+        {nums.map((n) => (
+          <a key={n} href={`tel:${n.replace(/[^+\d]/g,'')}`} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/70 dark:bg-white/5 border border-black/10 dark:border-white/10 hover:shadow-sm">
+            <Phone size={16} className="opacity-70" />
+            <span>{n}</span>
+          </a>
+        ))}
+      </div>
     </div>
   )
 }
@@ -237,21 +260,21 @@ function ContactForm() {
     <form onSubmit={handleSubmit} className="bg-white/70 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl p-6 space-y-3">
       <div>
         <label className="text-sm text-slate-700 dark:text-slate-300">Name</label>
-        <input name="name" required className="mt-1 w-full rounded-lg bg-white dark:bg-black/30 border border-black/10 dark:border-white/10 px-3 py-2 text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1e73be]/40" placeholder="Your name" />
+        <input name="name" required className="mt-1 w-full rounded-lg bg-white dark:bg-black/30 border border-black/10 dark:border-white/10 px-3 py-2 text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2" style={{ outlineColor: primary }} placeholder="Your name" />
       </div>
       <div>
         <label className="text-sm text-slate-700 dark:text-slate-300">Email</label>
-        <input name="email" type="email" required className="mt-1 w-full rounded-lg bg-white dark:bg-black/30 border border-black/10 dark:border-white/10 px-3 py-2 text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1e73be]/40" placeholder="you@company.com" />
+        <input name="email" type="email" required className="mt-1 w-full rounded-lg bg-white dark:bg-black/30 border border-black/10 dark:border-white/10 px-3 py-2 text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2" placeholder="you@company.com" />
       </div>
       <div>
         <label className="text-sm text-slate-700 dark:text-slate-300">Phone</label>
-        <input name="phone" className="mt-1 w-full rounded-lg bg-white dark:bg-black/30 border border-black/10 dark:border-white/10 px-3 py-2 text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1e73be]/40" placeholder="Optional" />
+        <input name="phone" className="mt-1 w-full rounded-lg bg-white dark:bg-black/30 border border-black/10 dark:border-white/10 px-3 py-2 text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2" placeholder="Optional" />
       </div>
       <div>
         <label className="text-sm text-slate-700 dark:text-slate-300">Message</label>
-        <textarea name="message" rows="4" required className="mt-1 w-full rounded-lg bg-white dark:bg-black/30 border border-black/10 dark:border-white/10 px-3 py-2 text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1e73be]/40" placeholder="How can we help?" />
+        <textarea name="message" rows="4" required className="mt-1 w-full rounded-lg bg-white dark:bg-black/30 border border-black/10 dark:border-white/10 px-3 py-2 text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2" placeholder="How can we help?" />
       </div>
-      <button type="submit" className="w-full bg-[#1e73be] hover:bg-[#2b84d4] text-white font-medium py-2.5 rounded-lg transition">Send Inquiry</button>
+      <button type="submit" className="w-full text-white font-medium py-2.5 rounded-lg transition" style={{ backgroundColor: primary }}>Send Inquiry</button>
       <p className="text-[11px] text-slate-500 dark:text-slate-400">By submitting you agree to our terms and consent to be contacted about our services.</p>
     </form>
   )

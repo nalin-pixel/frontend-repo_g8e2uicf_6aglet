@@ -6,15 +6,36 @@ import Sections from './components/Sections'
 function App() {
   const [open, setOpen] = useState(false)
 
-  // Ensure light theme is default on initial mount (in case of SSR hydration)
+  // Theme: default to light unless user previously chose dark
   useEffect(() => {
-    if (!localStorage.getItem('theme')) {
+    const saved = localStorage.getItem('theme')
+    if (saved === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
       document.documentElement.classList.remove('dark')
+      localStorage.setItem('theme', 'light')
     }
   }, [])
 
+  // Brand colors
+  const primary = '#008000' // primary
+  const accent = '#f87500'  // accent
+
   return (
-    <div className="min-h-screen bg-white text-slate-800 dark:bg-[#0b1220] dark:text-slate-100 selection:bg-[#1e73be]/20 selection:text-slate-900 dark:selection:bg-[#1e73be]/30 dark:selection:text-white">
+    <div
+      className="min-h-screen bg-white text-slate-800 dark:bg-[#0b1220] dark:text-slate-100"
+      style={{
+        // selection colors via CSS vars fallback handled inline
+        ['--selectionLightBg']: `${primary}20`,
+        ['--selectionDarkBg']: `${primary}33`,
+      }}
+    >
+      <style>{`
+        ::selection { background: var(--selectionLightBg); color: #0f172a; }
+        .dark ::selection { background: var(--selectionDarkBg); color: white; }
+        a { color: ${accent}; }
+        a:hover { color: ${accent}; opacity: 0.9; }
+      `}</style>
       {/* Sidebar */}
       <Sidebar open={open} setOpen={setOpen} />
 
