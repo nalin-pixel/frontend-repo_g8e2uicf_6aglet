@@ -1,8 +1,10 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Home, Info, Factory, Wrench, Phone, ChevronRight } from 'lucide-react'
+import { Menu, X, Home, Info, Factory, Wrench, Phone, Newspaper, Briefcase, Users, Building2, ShieldCheck, Award, Facebook, Linkedin, Instagram, Mail } from 'lucide-react'
 
 export default function Sidebar({ open, setOpen }) {
+  const [expanded, setExpanded] = useState(false)
+
   // Close on escape
   useEffect(() => {
     const onKey = (e) => {
@@ -15,15 +17,19 @@ export default function Sidebar({ open, setOpen }) {
   const links = [
     { href: '#home', label: 'Home', icon: Home },
     { href: '#about', label: 'About', icon: Info },
-    { href: '#solutions', label: 'Solutions', icon: Factory },
-    { href: '#products', label: 'Products & Services', icon: Wrench },
-    { href: '#contact', label: 'Contact', icon: Phone },
+    { href: '#products', label: 'Products', icon: Wrench },
+    { href: '#services', label: 'Services', icon: Factory },
+    { href: '#news', label: 'News & Events', icon: Newspaper },
+    { href: '#careers', label: 'Careers', icon: Briefcase },
+    { href: '#contact', label: 'Contact Us', icon: Phone },
   ]
+
+  const primaryColor = '#1e73be' // from logo
 
   return (
     <>
       {/* Top bar with menu button for mobile */}
-      <div className="fixed top-0 left-0 right-0 z-40 lg:hidden flex items-center justify-between px-4 py-3 bg-slate-900/60 backdrop-blur-md border-b border-white/10">
+      <div className="fixed top-0 left-0 right-0 z-40 lg:hidden flex items-center justify-between px-4 py-3 bg-[#0b1220]/80 backdrop-blur-md border-b border-white/10">
         <div className="flex items-center gap-3">
           <button
             aria-label="Open menu"
@@ -34,21 +40,28 @@ export default function Sidebar({ open, setOpen }) {
           </button>
           <span className="text-sm text-slate-300">Menu</span>
         </div>
-        <div className="text-xs text-slate-400">ACTIVE CONTROL AUTOMATION</div>
+        <div className="flex items-center gap-2">
+          <img src="https://images.unsplash.com/photo-1738045419183-79fd0707ffe5?ixid=M3w3OTkxMTl8MHwxfHNlYXJjaHwxfHxBY3RpdmUlMjBDb250cm9sJTIwQXV0b21hdGlvbnxlbnwwfDB8fHwxNzYzNDY5ODc0fDA&ixlib=rb-4.1.0&w=1600&auto=format&fit=crop&q=80" alt="Active Control Automation" className="h-7 w-auto" />
+        </div>
       </div>
 
-      {/* Desktop rail */}
-      <div className="hidden lg:flex fixed top-0 left-0 h-full w-[280px] z-40">
+      {/* Desktop rail with hover-to-expand */}
+      <div className="hidden lg:flex fixed top-0 left-0 h-full z-40">
         <motion.aside
-          initial={{ x: -20, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ type: 'spring', stiffness: 80, damping: 16 }}
-          className="w-full h-full bg-slate-950/70 backdrop-blur-xl border-r border-white/10 text-slate-200 flex flex-col"
+          onMouseEnter={() => setExpanded(true)}
+          onMouseLeave={() => setExpanded(false)}
+          animate={{ width: expanded ? 280 : 88 }}
+          transition={{ type: 'spring', stiffness: 200, damping: 24 }}
+          className="h-full bg-[#0b1220]/90 backdrop-blur-xl border-r border-white/10 text-slate-200 flex flex-col"
         >
-          <div className="px-5 py-6 border-b border-white/10">
-            <div className="text-xs tracking-widest text-blue-400/80">INDUSTRIAL SALES CORPORATION</div>
-            <h2 className="text-lg font-semibold leading-tight">ACTIVE CONTROL AUTOMATION</h2>
-            <p className="text-[11px] text-slate-400 mt-1">Industrial Automation • Process • Instrumentation</p>
+          <div className="px-4 py-5 border-b border-white/10 flex items-center gap-3">
+            <img src="https://images.unsplash.com/photo-1738045419183-79fd0707ffe5?ixid=M3w3OTkxMTl8MHwxfHNlYXJjaHwxfHxBY3RpdmUlMjBDb250cm9sJTIwQXV0b21hdGlvbnxlbnwwfDB8fHwxNzYzNDY5ODc0fDA&ixlib=rb-4.1.0&w=1600&auto=format&fit=crop&q=80" alt="Active Control Automation" className="h-10 w-auto" />
+            {expanded && (
+              <div className="overflow-hidden">
+                <div className="text-[10px] tracking-widest" style={{ color: primaryColor }}>INDUSTRIAL SALES CORPORATION</div>
+                <h2 className="text-sm font-semibold leading-tight">ACTIVE CONTROL AUTOMATION</h2>
+              </div>
+            )}
           </div>
 
           <nav className="flex-1 overflow-y-auto py-4">
@@ -56,17 +69,25 @@ export default function Sidebar({ open, setOpen }) {
               <a
                 key={href}
                 href={href}
-                className="group flex items-center gap-3 px-5 py-3 text-sm hover:bg-white/5 transition"
+                className="group flex items-center gap-3 px-4 py-3 text-sm hover:bg-white/5 transition"
               >
-                <span className="inline-flex w-6 justify-center text-slate-400 group-hover:text-blue-400 transition"><Icon size={18} /></span>
-                <span className="flex-1">{label}</span>
-                <ChevronRight className="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition" size={16} />
+                <span className="inline-flex w-8 justify-center text-slate-400 group-hover:text-slate-100 transition"><Icon size={18} /></span>
+                {expanded && <span className="flex-1">{label}</span>}
               </a>
             ))}
           </nav>
 
-          <div className="px-5 py-4 border-t border-white/10 text-xs text-slate-400">
-            © {new Date().getFullYear()} Active Control Automation. All rights reserved.
+          {/* Social icons */}
+          <div className="px-4 py-4 border-t border-white/10">
+            <div className="flex items-center gap-3 text-slate-400">
+              <a href="#" aria-label="Facebook" className="hover:text-white transition"><Facebook size={18} /></a>
+              <a href="#" aria-label="LinkedIn" className="hover:text-white transition"><Linkedin size={18} /></a>
+              <a href="#" aria-label="Instagram" className="hover:text-white transition"><Instagram size={18} /></a>
+              <a href="#contact" aria-label="Email" className="hover:text-white transition"><Mail size={18} /></a>
+            </div>
+            {expanded && (
+              <div className="text-[11px] text-slate-500 mt-3">Copyright © 2026 All Rights Reserved. Powered by Endsofttech Web Solutions</div>
+            )}
           </div>
         </motion.aside>
       </div>
@@ -90,12 +111,11 @@ export default function Sidebar({ open, setOpen }) {
               animate={{ x: 0 }}
               exit={{ x: -320 }}
               transition={{ type: 'spring', stiffness: 260, damping: 28 }}
-              className="fixed top-0 left-0 h-full w-[85%] max-w-[320px] z-50 bg-slate-950/90 backdrop-blur-xl border-r border-white/10 text-slate-200 flex flex-col"
+              className="fixed top-0 left-0 h-full w-[85%] max-w-[320px] z-50 bg-[#0b1220]/95 backdrop-blur-xl border-r border-white/10 text-slate-200 flex flex-col"
             >
               <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between">
-                <div>
-                  <div className="text-[10px] tracking-widest text-blue-400/80">INDUSTRIAL SALES CORPORATION</div>
-                  <h2 className="text-base font-semibold leading-tight">ACTIVE CONTROL AUTOMATION</h2>
+                <div className="flex items-center gap-2">
+                  <img src="https://images.unsplash.com/photo-1738045419183-79fd0707ffe5?ixid=M3w3OTkxMTl8MHwxfHNlYXJjaHwxfHxBY3RpdmUlMjBDb250cm9sJTIwQXV0b21hdGlvbnxlbnwwfDB8fHwxNzYzNDY5ODc0fDA&ixlib=rb-4.1.0&w=1600&auto=format&fit=crop&q=80" alt="Active Control Automation" className="h-8 w-auto" />
                 </div>
                 <button
                   aria-label="Close menu"
@@ -114,9 +134,8 @@ export default function Sidebar({ open, setOpen }) {
                     onClick={() => setOpen(false)}
                     className="group flex items-center gap-3 px-5 py-3 text-sm hover:bg-white/5 transition"
                   >
-                    <span className="inline-flex w-6 justify-center text-slate-400 group-hover:text-blue-400 transition"><Icon size={18} /></span>
+                    <span className="inline-flex w-6 justify-center text-slate-400 group-hover:text-slate-100 transition"><Icon size={18} /></span>
                     <span className="flex-1">{label}</span>
-                    <ChevronRight className="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition" size={16} />
                   </a>
                 ))}
               </nav>

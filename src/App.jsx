@@ -7,12 +7,12 @@ function App() {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-slate-950 selection:bg-blue-600/30 selection:text-white">
+    <div className="min-h-screen bg-[#0b1220] selection:bg-[#1e73be]/30 selection:text-white">
       {/* Sidebar */}
       <Sidebar open={open} setOpen={setOpen} />
 
-      {/* Main content shifted on desktop to account for sidebar width */}
-      <main className="lg:pl-[280px]">
+      {/* Main content: leave space equal to collapsed rail width on desktop */}
+      <main className="lg:pl-[88px]">
         <Hero />
         <Sections />
       </main>

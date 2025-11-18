@@ -9,9 +9,9 @@ export default function Hero() {
       </div>
 
       {/* Gradient overlay for readability */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/80" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0b1220]/85 via-[#0b1220]/40 to-[#0b1220]/90" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:pl-[320px] lg:pr-12 py-28 lg:py-36">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:pl-[88px] lg:pr-12 py-28 lg:py-36">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -19,8 +19,8 @@ export default function Hero() {
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="max-w-3xl"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-200 text-xs mb-4">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1e73be]/10 border border-[#1e73be]/30 text-[#b2d0f2] text-xs mb-4">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#1e73be] animate-pulse" />
             Industrial Automation Experts
           </div>
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
@@ -31,8 +31,8 @@ export default function Hero() {
             Premium handcrafted solutions in process instrumentation, automation, and control systems. We design, supply, and integrate high-reliability industrial technologies for factories and critical infrastructure.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <a href="#solutions" className="inline-flex items-center justify-center px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium transition-colors">
-              Explore Solutions
+            <a href="#services" className="inline-flex items-center justify-center px-5 py-2.5 rounded-lg bg-[#1e73be] hover:bg-[#2b84d4] text-white font-medium transition-colors">
+              Explore Services
             </a>
             <a href="#contact" className="inline-flex items-center justify-center px-5 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium backdrop-blur-md border border-white/15 transition-colors">
               Talk to Experts
