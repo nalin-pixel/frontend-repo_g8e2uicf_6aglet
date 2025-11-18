@@ -1,9 +1,35 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Home, Info, Factory, Wrench, Phone, Newspaper, Briefcase, Users, Building2, ShieldCheck, Award, Facebook, Linkedin, Instagram, Mail } from 'lucide-react'
+import { Menu, X, Home, Info, Factory, Wrench, Phone, Newspaper, Briefcase, Facebook, Linkedin, Instagram, Mail, Sun, Moon } from 'lucide-react'
 
 export default function Sidebar({ open, setOpen }) {
   const [expanded, setExpanded] = useState(false)
+  const [isDark, setIsDark] = useState(false)
+
+  // Theme control
+  useEffect(() => {
+    // Default to light theme
+    document.documentElement.classList.remove('dark')
+    setIsDark(false)
+    // Respect previously saved preference
+    const saved = localStorage.getItem('theme')
+    if (saved === 'dark') {
+      document.documentElement.classList.add('dark')
+      setIsDark(true)
+    }
+  }, [])
+
+  const toggleTheme = () => {
+    const next = !isDark
+    setIsDark(next)
+    if (next) {
+      document.documentElement.classList.add('dark')
+      localStorage.setItem('theme', 'dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+      localStorage.setItem('theme', 'light')
+    }
+  }
 
   // Close on escape
   useEffect(() => {
@@ -25,23 +51,24 @@ export default function Sidebar({ open, setOpen }) {
   ]
 
   const primaryColor = '#1e73be' // from logo
+  const logoUrl = import.meta.env.VITE_LOGO_URL || 'https://activecontrolautomation.com/wp-content/uploads/2020/09/cropped-ActiveControl-logo-1.png'
 
   return (
     <>
       {/* Top bar with menu button for mobile */}
-      <div className="fixed top-0 left-0 right-0 z-40 lg:hidden flex items-center justify-between px-4 py-3 bg-[#0b1220]/80 backdrop-blur-md border-b border-white/10">
+      <div className="fixed top-0 left-0 right-0 z-40 lg:hidden flex items-center justify-between px-4 py-3 bg-white/80 dark:bg-[#0b1220]/80 backdrop-blur-md border-b border-black/10 dark:border-white/10">
         <div className="flex items-center gap-3">
           <button
             aria-label="Open menu"
             onClick={() => setOpen(true)}
-            className="inline-flex items-center justify-center rounded-md p-2 text-slate-200 hover:text-white hover:bg-white/10 transition"
+            className="inline-flex items-center justify-center rounded-md p-2 text-slate-700 dark:text-slate-200 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition"
           >
-            <Menu size={22} />
+            <Menu size={24} />
           </button>
-          <span className="text-sm text-slate-300">Menu</span>
+          <span className="text-sm text-slate-600 dark:text-slate-300">Menu</span>
         </div>
         <div className="flex items-center gap-2">
-          <img src="https://images.unsplash.com/photo-1738045419183-79fd0707ffe5?ixid=M3w3OTkxMTl8MHwxfHNlYXJjaHwxfHxBY3RpdmUlMjBDb250cm9sJTIwQXV0b21hdGlvbnxlbnwwfDB8fHwxNzYzNDY5ODc0fDA&ixlib=rb-4.1.0&w=1600&auto=format&fit=crop&q=80" alt="Active Control Automation" className="h-7 w-auto" />
+          <img src={logoUrl} alt="Active Control Automation" className="h-7 w-auto" />
         </div>
       </div>
 
@@ -52,10 +79,10 @@ export default function Sidebar({ open, setOpen }) {
           onMouseLeave={() => setExpanded(false)}
           animate={{ width: expanded ? 280 : 88 }}
           transition={{ type: 'spring', stiffness: 200, damping: 24 }}
-          className="h-full bg-[#0b1220]/90 backdrop-blur-xl border-r border-white/10 text-slate-200 flex flex-col"
+          className="h-full bg-white/90 dark:bg-[#0b1220]/90 backdrop-blur-xl border-r border-black/10 dark:border-white/10 text-slate-800 dark:text-slate-200 flex flex-col"
         >
-          <div className="px-4 py-5 border-b border-white/10 flex items-center gap-3">
-            <img src="https://images.unsplash.com/photo-1738045419183-79fd0707ffe5?ixid=M3w3OTkxMTl8MHwxfHNlYXJjaHwxfHxBY3RpdmUlMjBDb250cm9sJTIwQXV0b21hdGlvbnxlbnwwfDB8fHwxNzYzNDY5ODc0fDA&ixlib=rb-4.1.0&w=1600&auto=format&fit=crop&q=80" alt="Active Control Automation" className="h-10 w-auto" />
+          <div className="px-4 py-5 border-b border-black/10 dark:border-white/10 flex items-center gap-3">
+            <img src={logoUrl} alt="Active Control Automation" className="h-10 w-auto" />
             {expanded && (
               <div className="overflow-hidden">
                 <div className="text-[10px] tracking-widest" style={{ color: primaryColor }}>INDUSTRIAL SALES CORPORATION</div>
@@ -69,24 +96,38 @@ export default function Sidebar({ open, setOpen }) {
               <a
                 key={href}
                 href={href}
-                className="group flex items-center gap-3 px-4 py-3 text-sm hover:bg-white/5 transition"
+                className="group flex items-center gap-3 px-4 py-3 text-sm hover:bg-black/5 dark:hover:bg-white/5 transition"
               >
-                <span className="inline-flex w-8 justify-center text-slate-400 group-hover:text-slate-100 transition"><Icon size={18} /></span>
+                <span className="inline-flex w-9 justify-center text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-100 transition"><Icon size={22} /></span>
                 {expanded && <span className="flex-1">{label}</span>}
               </a>
             ))}
           </nav>
 
-          {/* Social icons */}
-          <div className="px-4 py-4 border-t border-white/10">
-            <div className="flex items-center gap-3 text-slate-400">
-              <a href="#" aria-label="Facebook" className="hover:text-white transition"><Facebook size={18} /></a>
-              <a href="#" aria-label="LinkedIn" className="hover:text-white transition"><Linkedin size={18} /></a>
-              <a href="#" aria-label="Instagram" className="hover:text-white transition"><Instagram size={18} /></a>
-              <a href="#contact" aria-label="Email" className="hover:text-white transition"><Mail size={18} /></a>
+          {/* Theme toggle + Social icons */}
+          <div className="px-4 py-4 border-t border-black/10 dark:border-white/10">
+            <div className="flex items-center justify-between">
+              <button
+                onClick={toggleTheme}
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-black/5 dark:bg-white/10 text-slate-800 dark:text-slate-200 hover:bg-black/10 dark:hover:bg-white/15 transition"
+                aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+                title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+              >
+                {isDark ? <Sun size={18} /> : <Moon size={18} />}
+                {expanded && <span className="text-sm">{isDark ? 'Light theme' : 'Dark theme'}</span>}
+              </button>
             </div>
+
+            {/* Two-row social grid */}
+            <div className="mt-3 grid grid-cols-2 gap-3 text-slate-600 dark:text-slate-400">
+              <a href="#" aria-label="Facebook" className="flex items-center justify-center rounded-lg px-3 py-2 hover:bg-black/5 dark:hover:bg-white/10 transition"><Facebook size={20} /></a>
+              <a href="#" aria-label="LinkedIn" className="flex items-center justify-center rounded-lg px-3 py-2 hover:bg_black/5 dark:hover:bg-white/10 transition"><Linkedin size={20} /></a>
+              <a href="#" aria-label="Instagram" className="flex items-center justify-center rounded-lg px-3 py-2 hover:bg-black/5 dark:hover:bg_white/10 transition"><Instagram size={20} /></a>
+              <a href="#contact" aria-label="Email" className="flex items-center justify-center rounded-lg px-3 py-2 hover:bg-black/5 dark:hover:bg-white/10 transition"><Mail size={20} /></a>
+            </div>
+
             {expanded && (
-              <div className="text-[11px] text-slate-500 mt-3">Copyright © 2026 All Rights Reserved. Powered by Endsofttech Web Solutions</div>
+              <div className="text-[11px] text-slate-500 dark:text-slate-500 mt-3">Copyright © 2026 All Rights Reserved. Powered by Endsofttech Web Solutions</div>
             )}
           </div>
         </motion.aside>
@@ -111,18 +152,18 @@ export default function Sidebar({ open, setOpen }) {
               animate={{ x: 0 }}
               exit={{ x: -320 }}
               transition={{ type: 'spring', stiffness: 260, damping: 28 }}
-              className="fixed top-0 left-0 h-full w-[85%] max-w-[320px] z-50 bg-[#0b1220]/95 backdrop-blur-xl border-r border-white/10 text-slate-200 flex flex-col"
+              className="fixed top-0 left-0 h-full w-[85%] max-w-[320px] z-50 bg-white/95 dark:bg-[#0b1220]/95 backdrop-blur-xl border-r border-black/10 dark:border-white/10 text-slate-800 dark:text-slate-200 flex flex-col"
             >
-              <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between">
+              <div className="px-5 py-4 border-b border-black/10 dark:border-white/10 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <img src="https://images.unsplash.com/photo-1738045419183-79fd0707ffe5?ixid=M3w3OTkxMTl8MHwxfHNlYXJjaHwxfHxBY3RpdmUlMjBDb250cm9sJTIwQXV0b21hdGlvbnxlbnwwfDB8fHwxNzYzNDY5ODc0fDA&ixlib=rb-4.1.0&w=1600&auto=format&fit=crop&q=80" alt="Active Control Automation" className="h-8 w-auto" />
+                  <img src={logoUrl} alt="Active Control Automation" className="h-8 w-auto" />
                 </div>
                 <button
                   aria-label="Close menu"
                   onClick={() => setOpen(false)}
-                  className="inline-flex items-center justify-center rounded-md p-2 text-slate-300 hover:text-white hover:bg-white/10 transition"
+                  className="inline-flex items-center justify-center rounded-md p-2 text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition"
                 >
-                  <X size={20} />
+                  <X size={22} />
                 </button>
               </div>
 
@@ -132,13 +173,29 @@ export default function Sidebar({ open, setOpen }) {
                     key={href}
                     href={href}
                     onClick={() => setOpen(false)}
-                    className="group flex items-center gap-3 px-5 py-3 text-sm hover:bg-white/5 transition"
+                    className="group flex items-center gap-3 px-5 py-3 text-sm hover:bg-black/5 dark:hover:bg-white/5 transition"
                   >
-                    <span className="inline-flex w-6 justify-center text-slate-400 group-hover:text-slate-100 transition"><Icon size={18} /></span>
+                    <span className="inline-flex w-7 justify-center text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-100 transition"><Icon size={22} /></span>
                     <span className="flex-1">{label}</span>
                   </a>
                 ))}
               </nav>
+
+              <div className="px-5 py-4 border-t border-black/10 dark:border-white/10">
+                <button
+                  onClick={toggleTheme}
+                  className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-black/5 dark:bg-white/10 text-slate-800 dark:text-slate-200 hover:bg-black/10 dark:hover:bg-white/15 transition"
+                >
+                  {isDark ? <Sun size={18} /> : <Moon size={18} />}
+                  <span className="text-sm">{isDark ? 'Light theme' : 'Dark theme'}</span>
+                </button>
+                <div className="mt-3 grid grid-cols-4 gap-3 text-slate-600 dark:text-slate-400">
+                  <a href="#" aria-label="Facebook" className="flex items-center justify-center rounded-lg px-3 py-2 hover:bg-black/5 dark:hover:bg-white/10 transition"><Facebook size={20} /></a>
+                  <a href="#" aria-label="LinkedIn" className="flex items-center justify-center rounded-lg px-3 py-2 hover:bg-black/5 dark:hover:bg_white/10 transition"><Linkedin size={20} /></a>
+                  <a href="#" aria-label="Instagram" className="flex items-center justify-center rounded-lg px-3 py-2 hover:bg-black/5 dark:hover:bg-white/10 transition"><Instagram size={20} /></a>
+                  <a href="#contact" aria-label="Email" className="flex items-center justify-center rounded-lg px-3 py-2 hover:bg-black/5 dark:hover:bg-white/10 transition"><Mail size={20} /></a>
+                </div>
+              </div>
             </motion.aside>
           </>
         )}
